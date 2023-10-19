@@ -118,12 +118,26 @@ button:focus-visible {
 }
 
 .element-game-box {
-  width: auto;
-  height: auto;
+  width: 120px;
+  height: 120px;
 
   border-radius: 5px;
 }
 
+.element-game-box:hover {
+  transform: scale(110%);
+
+  transition: all 100ms;
+}
+
 .not-selected {
   background-color: var(--transparent-black);
+}
+
+.player-1-selected {
+  background-color: red;
+}
+
+.player-2-selected {
+  background-color: blue;
 }
