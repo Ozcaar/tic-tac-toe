@@ -145,3 +145,29 @@ button:focus-visible {
 .player-2-selected {
   background-color: blue;
 }
+
+/* Table styles */
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+  border-radius: 5px;
+  background-color: #1a1a1a;
+}
+
+td, th {
+  /* border: 1px solid #ddd; */
+  padding: 8px;
+}
+
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.20);
+  cursor: pointer;
+  transition: all 100ms;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.20);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.10);
+}

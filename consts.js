@@ -2,7 +2,7 @@ import $ from "jquery";
 
 // When this function is called retuns an array of arrays
 // with all the elements in 0's
-export function BOARD() {
+export function emptyBoard() {
     return [
         [0, 0, 0],
         [0, 0, 0],
@@ -26,4 +26,5 @@ export const TURN = {
 
 // DOM elements
 export const GAME_CONTAINER = $(".game-container");
+export const TURN_TITLE = $("#turn-title");
 

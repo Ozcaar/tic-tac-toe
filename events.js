@@ -1,13 +1,15 @@
 import $ from "jquery";
-import { GAME_CONTAINER } from "./consts"; // DOM elements constants
-import { BOARD, TURN } from "./consts";
+import { GAME_CONTAINER, TURN_TITLE } from "./consts"; // DOM elements constants
+import { emptyBoard, TURN } from "./consts";
+
+var currentBoard;
 
 function resetBoard() {
     // Delete and create again the board in blank
-    currentBoard = new BOARD;
+    currentBoard = new emptyBoard();
     GAME_CONTAINER.html("");
-    for (var i = 0; i < 9; i++) {
-        GAME_CONTAINER.append(`<div class="element-game-box" position="${i}"></div>`);
+        for (var i = 0; i < 9; i++) {
+            GAME_CONTAINER.append(`<div class="element-game-box" position="${i}"></div>`);
     }
 }
 
@@ -32,14 +34,16 @@ function checkWinner(board, playerTurn) {
         Swal.fire({ // Alert from SweetAlert2
             imageUrl: "./public/imgs/emoji-party.png",
             title: `Player ${playerTurn} wins!`
+        }).then(function () {
+            resetBoard();
         });
-        resetBoard();
     }
 }
 
 // Wait for DOM loads
 $(function () {
     var playerTurn = 1; // Sets the current turn to player 1
+    currentBoard = new emptyBoard();
     // Event when the user click´s an element_game_box
     $(GAME_CONTAINER).on("click", ".element-game-box", function () {
         // Operations to calculate the position of the element_game_box
@@ -47,6 +51,8 @@ $(function () {
         var posX = attrPosition % 3;
         var posY = Math.floor(attrPosition / 3);
 
+        // Verfy if the clicked box is not selected, and if it is not selected
+        // put the mark of the player in turn and check if wins
         if (currentBoard[posY][posX] === 0) {
             $(this).addClass(TURN[playerTurn].className);
             $(this).html(TURN[playerTurn].mark);
@@ -55,6 +61,7 @@ $(function () {
             checkWinner(currentBoard, playerTurn);
 
             playerTurn === 1 ? playerTurn = 2 : playerTurn = 1;
+            TURN_TITLE.text(`Player ${playerTurn}'s Turn`);
         }
     });
 });
