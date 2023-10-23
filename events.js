@@ -38,6 +38,17 @@ function checkWinner(board, playerTurn) {
             resetBoard();
         });
     }
+
+    // Check if the board is full
+    if (!board[0].includes(0) && !board[1].includes(0) && !board[2].includes(0)) {
+        Swal.fire({ // Alert from SweetAlert2
+            imageUrl: "./public/imgs/dizzy-face-emoji.png",
+            title: `Nobody wins`,
+            width: "600"
+        }).then(function () {
+            resetBoard();
+        });
+    }
 }
 
 // Wait for DOM loads
