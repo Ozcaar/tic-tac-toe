@@ -1,3 +1,5 @@
+"use strict";
+
 import $ from "jquery";
 
 // When this function is called retuns an array of arrays
@@ -27,4 +29,5 @@ export const TURN = {
 // DOM elements
 export const GAME_CONTAINER = $(".game-container");
 export const TURN_TITLE = $("#turn-title");
+export const TABLE_HEADER = $("#table-body");
 
