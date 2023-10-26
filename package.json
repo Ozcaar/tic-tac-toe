@@ -16,5 +16,9 @@
     "extends": [
       "standard"
     ]
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "sweetalert2": "^11.7.32"
   }
 }
