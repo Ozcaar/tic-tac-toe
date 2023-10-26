@@ -25,10 +25,9 @@ $(function () {
             $(this).html(TURN[playerTurn].mark);
 
             currentBoard[posY][posX] = playerTurn;
-            let x = checkWinner(currentBoard, playerTurn);
-            console.log(x);
-            if(x) 
-                { currentBoard = new emptyBoard(); console.log(currentBoard); } // Delete and create again the board in blank
+            
+            if(checkWinner(currentBoard, playerTurn)) 
+                { currentBoard = new emptyBoard(); } // Delete and create again the board in blank
 
             playerTurn === 1 ? playerTurn = 2 : playerTurn = 1;
             TURN_TITLE.text(`Player ${playerTurn}'s Turn`);

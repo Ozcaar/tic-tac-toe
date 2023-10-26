@@ -2,10 +2,8 @@
 
 import "./style.css";
 import $ from "jquery";
-import { emptyBoard } from "./consts";
 import { GAME_CONTAINER, TABLE_HEADER } from "./consts"; // DOM elements constants
 
-var currentBoard;
 var saveID = 1;
 var savedGames = {}
 
@@ -15,7 +13,7 @@ $(function() {
     
 });
 
-export function saveGame(playerTurn, currentBoard) {
+function saveGame(playerTurn, currentBoard) {
     // Save the current board the table
     savedGames[saveID] = { winner: playerTurn, board: currentBoard }; // Save the current board in an object (this is used to load board status)
 
@@ -31,18 +29,18 @@ export function saveGame(playerTurn, currentBoard) {
     saveID++;
 }
 
-export function resetBoard(currentBoard) {
+function resetBoard() {
     GAME_CONTAINER.html("");
         for (var i = 0; i < 9; i++) {
             GAME_CONTAINER.append(`<div class="element-game-box" position="${i}"></div>`);
     }
 }
 
-export function checkWinner(board, playerTurn) {
+export function checkWinner(currentBoard, playerTurn) {
     // Check the rows and columns
     for (var i = 0; i < 3; i++) {
-        if ((board[i][0] === playerTurn && board[i][1] === playerTurn && board[i][2] === playerTurn) ||
-            (board[0][i] === playerTurn && board[1][i] === playerTurn && board[2][i] === playerTurn)) {
+        if ((currentBoard[i][0] === playerTurn && currentBoard[i][1] === playerTurn && currentBoard[i][2] === playerTurn) ||
+            (currentBoard[0][i] === playerTurn && currentBoard[1][i] === playerTurn && currentBoard[2][i] === playerTurn)) {
             Swal.fire({ // Alert from SweetAlert2
                 imageUrl: "./public/imgs/emoji-party.png",
                 title: `Player ${playerTurn} wins!`,
@@ -50,13 +48,14 @@ export function checkWinner(board, playerTurn) {
             }).then(function () {
                 saveGame(playerTurn);
                 resetBoard();
+                
             });
-            break;  // It's not necessary keep verifying, already founded a winner.
+            return true;
         }
     }
     // Check the diagonals
-    if ((board[0][0] === playerTurn && board[1][1] === playerTurn && board[2][2] === playerTurn) ||
-        (board[0][2] === playerTurn && board[1][1] === playerTurn && board[2][0] === playerTurn)) {
+    if ((currentBoard[0][0] === playerTurn && currentBoard[1][1] === playerTurn && currentBoard[2][2] === playerTurn) ||
+        (currentBoard[0][2] === playerTurn && currentBoard[1][1] === playerTurn && currentBoard[2][0] === playerTurn)) {
         Swal.fire({ // Alert from SweetAlert2
             imageUrl: "./public/imgs/emoji-party.png",
             title: `Player ${playerTurn} wins!`
@@ -64,10 +63,11 @@ export function checkWinner(board, playerTurn) {
             saveGame(playerTurn);
             resetBoard();
         });
+        return true;
     }
 
     // Check if the board is full
-    if (!board[0].includes(0) && !board[1].includes(0) && !board[2].includes(0)) {
+    if (!currentBoard[0].includes(0) && !currentBoard[1].includes(0) && !currentBoard[2].includes(0)) {
         Swal.fire({ // Alert from SweetAlert2
             imageUrl: "./public/imgs/dizzy-face-emoji.png",
             title: `Nobody wins`,
@@ -76,5 +76,8 @@ export function checkWinner(board, playerTurn) {
             // saveGame(playerTurn); This line should not be, because we will not save what player wins if the board is full
             resetBoard();
         });
+        return true;
     }
+
+    return false; // If no found a winner, return false
 }
