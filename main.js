@@ -2,10 +2,11 @@
 
 import "./style.css";
 import $ from "jquery";
-import { GAME_CONTAINER, TABLE_HEADER } from "./consts"; // DOM elements constants
+import { TURN } from "./consts";
+import { GAME_CONTAINER, TABLE_BODY } from "./consts"; // DOM elements constants
 
 var saveID = 1;
-var savedGames = {}
+export var savedPlays = {}
 
 // Wait for jquery loads
 $(function() {
@@ -15,28 +16,31 @@ $(function() {
 
 function saveGame(playerTurn, currentBoard) {
     // Save the current board the table
-    savedGames[saveID] = { winner: playerTurn, board: currentBoard }; // Save the current board in an object (this is used to load board status)
+    savedPlays[saveID] = { winner: playerTurn, board: currentBoard }; // Save the current board in an object (this is used to load board status)
 
+    // Create a new row for the table
     let newRow = `
         <tr>
             <td>${saveID}</td>
             <td>Player ${playerTurn}</td>
-            <td><button>View</button></td>
+            <td><button id="${saveID}" class="view-button">View</button></td>
         </tr>`;
 
-    TABLE_HEADER.append(newRow);
+    // Appends the new row to the table
+    TABLE_BODY.append(newRow);
 
-    saveID++;
+    saveID++; // Prepares the next saveID
 }
 
 function resetBoard() {
+    // Reset the html of the board, then appends the new element-game-boxes to the board
     GAME_CONTAINER.html("");
-        for (var i = 0; i < 9; i++) {
-            GAME_CONTAINER.append(`<div class="element-game-box" position="${i}"></div>`);
+    for (var i = 0; i < 9; i++) {
+        GAME_CONTAINER.append(`<div class="element-game-box" position="${i}"></div>`);
     }
 }
 
-export function checkWinner(currentBoard, playerTurn) {
+export function checkWinner(playerTurn, currentBoard) {
     // Check the rows and columns
     for (var i = 0; i < 3; i++) {
         if ((currentBoard[i][0] === playerTurn && currentBoard[i][1] === playerTurn && currentBoard[i][2] === playerTurn) ||
@@ -46,13 +50,14 @@ export function checkWinner(currentBoard, playerTurn) {
                 title: `Player ${playerTurn} wins!`,
                 width: "600"
             }).then(function () {
-                saveGame(playerTurn);
+                saveGame(playerTurn, currentBoard);
                 resetBoard();
                 
             });
             return true;
         }
     }
+
     // Check the diagonals
     if ((currentBoard[0][0] === playerTurn && currentBoard[1][1] === playerTurn && currentBoard[2][2] === playerTurn) ||
         (currentBoard[0][2] === playerTurn && currentBoard[1][1] === playerTurn && currentBoard[2][0] === playerTurn)) {
@@ -60,7 +65,7 @@ export function checkWinner(currentBoard, playerTurn) {
             imageUrl: "./public/imgs/emoji-party.png",
             title: `Player ${playerTurn} wins!`
         }).then(function () {
-            saveGame(playerTurn);
+            saveGame(playerTurn, currentBoard);
             resetBoard();
         });
         return true;
@@ -80,4 +85,45 @@ export function checkWinner(currentBoard, playerTurn) {
     }
 
     return false; // If no found a winner, return false
+}
+
+function generatePlayHTML(playID) {
+
+    let html = '';
+
+    for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+            html = html.concat(`<div class="element-game-box ${TURN[savedPlays[playID.winner].board[i][j]].className}">${TURN[savedPlays[playID.winner].board[i][j]].mark}</div>`);
+        }
+    }
+    return html;
+
+    // return `
+    //     <div class="game-container grid">
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+    //         <div class="element-game-box"></div>
+    //     </div>
+    //     `
+}
+
+export function showSavedPlay(playID) {
+
+    Swal.fire({ // Alert from SweetAlert2
+        title: `{{ Placeholder }}`,
+        html: `<div class="game-container grid">${generatePlayHTML(playID)}</div>`,
+        width: "600",
+        showDenyButton: true,
+        denyButtonText: 'Close',
+        showConfirmButton: false
+    }).then(function () {
+    });
 }
