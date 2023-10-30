@@ -16,7 +16,7 @@ $(function() {
 
 function saveGame(playerTurn, currentBoard) {
     // Save the current board the table
-    savedPlays[saveID] = { winner: playerTurn, board: currentBoard }; // Save the current board in an object (this is used to load board status)
+    savedPlays[saveID] = { id: saveID ,winner: playerTurn, board: currentBoard }; // Save the current board in an object (this is used to load board status)
 
     // Create a new row for the table
     let newRow = `
@@ -52,7 +52,6 @@ export function checkWinner(playerTurn, currentBoard) {
             }).then(function () {
                 saveGame(playerTurn, currentBoard);
                 resetBoard();
-                
             });
             return true;
         }
@@ -93,26 +92,12 @@ function generatePlayHTML(playID) {
 
     for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
-            html = html.concat(`<div class="element-game-box ${TURN[savedPlays[playID.winner].board[i][j]].className}">${TURN[savedPlays[playID.winner].board[i][j]].mark}</div>`);
+            // console.log(playID.winner);
+            // console.log(savedPlays);
+            html = html.concat(`<div class="element-game-box ${TURN[savedPlays[playID].board[i][j]].className}">${TURN[savedPlays[playID].board[i][j]].mark}</div>`);
         }
     }
     return html;
-
-    // return `
-    //     <div class="game-container grid">
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-    //         <div class="element-game-box"></div>
-    //     </div>
-    //     `
 }
 
 export function showSavedPlay(playID) {

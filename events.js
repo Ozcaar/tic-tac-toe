@@ -27,13 +27,13 @@ $(function () {
             $(this).html(TURN[playerTurn].mark);
             currentBoard[posY][posX] = playerTurn;
             if(checkWinner(playerTurn, currentBoard)) 
-                { currentBoard = new emptyBoard(); } // If some player wins delete and create again the board in blank
+                { currentBoard = new emptyBoard(); console.log(playerTurn); } // If some player wins delete and create again the board in blank
             playerTurn === 1 ? playerTurn = 2 : playerTurn = 1;
             TURN_TITLE.text(`Player ${playerTurn}'s Turn`);
         }
     });
 
     $(TABLE_BODY).on("click", ".view-button", function (e) {
-        showSavedPlay(savedPlays[e.target.id]);
+        showSavedPlay(e.target.id);
     })
 });
